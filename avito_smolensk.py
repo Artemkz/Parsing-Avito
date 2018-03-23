@@ -3,6 +3,19 @@ from bs4 import BeautifulSoup
 import csv
 
 
+def main():
+    url = 'https://www.avito.ru/smolensk/kvartiry/prodam?p=1&view=list'
+    base_url = 'https://www.avito.ru/smolensk/kvartiry/prodam?'
+    page_part = 'p='
+    query_part = '&view=list'
+    total_pages = get_total_pages(get_html(url))
+    for i in range(total_pages+1):
+    # for i in range(1, 3):
+        url_gen = base_url + page_part + str(i) + query_part
+        html = get_html(url_gen)
+        get_page_data(html)
+
+        
 def get_html(url):
     r = requests.get(url)
     return r.text
@@ -46,19 +59,6 @@ def get_page_data(html):
                 'area': area,
                 'address': address}
         write_csv(data)
-
-
-def main():
-    url = 'https://www.avito.ru/smolensk/kvartiry/prodam?p=1&view=list'
-    base_url = 'https://www.avito.ru/smolensk/kvartiry/prodam?'
-    page_part = 'p='
-    query_part = '&view=list'
-    total_pages = get_total_pages(get_html(url))
-    for i in range(total_pages+1):
-    # for i in range(1, 3):
-        url_gen = base_url + page_part + str(i) + query_part
-        html = get_html(url_gen)
-        get_page_data(html)
 
 
 if __name__ == '__main__':
