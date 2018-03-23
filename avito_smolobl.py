@@ -4,6 +4,19 @@ import csv
 from time import sleep
 
 
+def main():
+    url = 'https://www.avito.ru/smolenskaya_oblast/kvartiry/prodam?p=1&view=list'
+    base_url = 'https://www.avito.ru/smolenskaya_oblast/kvartiry/prodam?'
+    page_part = 'p='
+    query_part = '&view=list'
+    total_pages = get_total_pages(get_html(url))
+    for i in range(total_pages+1):
+    # for i in range(1, 3):
+        url_gen = base_url + page_part + str(i) + query_part
+        html = get_html(url_gen)
+        get_page_data(html)
+
+
 def get_html(url):
     r = requests.get(url)
     return r.text
@@ -48,19 +61,6 @@ def get_page_data(html):
                 'region': region}
         write_csv(data)
         sleep(3)
-
-
-def main():
-    url = 'https://www.avito.ru/smolenskaya_oblast/kvartiry/prodam?p=1&view=list'
-    base_url = 'https://www.avito.ru/smolenskaya_oblast/kvartiry/prodam?'
-    page_part = 'p='
-    query_part = '&view=list'
-    total_pages = get_total_pages(get_html(url))
-    for i in range(total_pages+1):
-    # for i in range(1, 3):
-        url_gen = base_url + page_part + str(i) + query_part
-        html = get_html(url_gen)
-        get_page_data(html)
 
 
 if __name__ == '__main__':
